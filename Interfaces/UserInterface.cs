@@ -1,12 +1,13 @@
-﻿using Spectre.Console;
+﻿using CodingTracker.Controllers;
+using Spectre.Console;
 using static CodingTracker.Enums;
 
-namespace CodingTracker
+namespace CodingTracker.Interfaces
 {
-    public class UserInput
+    public class UserInterface
     {
         CodingController controller = new CodingController();
-        CodingLogsDatabase db = new CodingLogsDatabase();
+        DatabaseController db = new DatabaseController();
         internal void MainMenu()
         {
             while (true)
@@ -21,18 +22,17 @@ namespace CodingTracker
                 );
                 switch (choice)
                 {
-                    case (Options.AddLog):
+                    case Options.AddLog:
                         controller.AddCodingSession(db);
                         break;
-                    case (Options.DeleteLog):
+                    case Options.DeleteLog:
                         controller.DeleteCodingSession(db);
                         break;
-                    case (Options.ReviewChoices):
+                    case Options.ReviewChoices:
                         controller.ReviewCodingSessions(db);
                         break;
-                    case (Options.Quit):
-                        db.Quit();
-                        break;
+                    case Options.Quit:
+                        return;
                 }
 
             }
