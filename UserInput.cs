@@ -1,10 +1,5 @@
 ﻿using Spectre.Console;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
+using static CodingTracker.Enums;
 
 namespace CodingTracker
 {
@@ -16,38 +11,31 @@ namespace CodingTracker
         {
             while (true)
             {
+
                 AnsiConsole.Clear();
                 AnsiConsole.MarkupLine("[bold green]What would you like to do?[/]");
                 var choice = AnsiConsole.Prompt(
-                    new SelectionPrompt<string>()
-                        .AddChoices(new[] { "Add a coding session", "Delete a coding session", "Review coding sessions", "Quit" })
+                    new SelectionPrompt<Options>()
+                        .AddChoices(Enum.GetValues<Options>())
                         .Title("Select an option")
                 );
-
-                if (choice == "Add a coding session")
+                switch (choice)
                 {
-                    controller.AddCodingSession(db);
-                }
-                else if (choice == "Delete a coding session")
-                {
-                    controller.DeleteCodingSession(db);
-                }
-                else if (choice == "Review coding sessions")
-                {
-                   controller.ReviewCodingSessions(db);
-                }
-                else if (choice == "Quit")
-                {
-                    db.Quit();
-                    break;
+                    case (Options.AddLog):
+                        controller.AddCodingSession(db);
+                        break;
+                    case (Options.DeleteLog):
+                        controller.DeleteCodingSession(db);
+                        break;
+                    case (Options.ReviewChoices):
+                        controller.ReviewCodingSessions(db);
+                        break;
+                    case (Options.Quit):
+                        db.Quit();
+                        break;
                 }
 
             }
-
         }
-        
-        
-
-        
     }
 }

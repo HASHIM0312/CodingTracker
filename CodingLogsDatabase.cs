@@ -1,12 +1,7 @@
 ﻿using Dapper;
 using Spectre.Console;
-using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SQLite;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CodingTracker
 {
@@ -26,14 +21,13 @@ namespace CodingTracker
         //Add a coding session
         public void AddLog(CodingSession log)
         {
-
             string? name_ = log.name;
             string? startTime_ = log.startTime;
             string? endTime_ = log.endTime;
             double? duration_ = log.duration;
 
             var sql = "INSERT INTO Logs (name, startTime, endTime, duration) VALUES (@name, @startTime, @endTime, @duration)";
-            object[] param = { new { name = name_, startTime = startTime_, endTime = endTime_, duration = duration_ }};
+            object[] param = { new { name = name_, startTime = startTime_, endTime = endTime_, duration = duration_ } };
             connection.Execute(sql, param);
         }
 
@@ -43,6 +37,9 @@ namespace CodingTracker
             var sql = "DELETE FROM Logs WHERE Id = @id";
             object[] param = { new { id = id } };
             connection.Execute(sql, param);
+
+            sql = @"UPDATE Logs SET id = id - 1 WHERE id > @id";
+            connection.Execute(sql, param);
         }
         //Review coding sessions
         public void ReviewLogs()
@@ -50,16 +47,17 @@ namespace CodingTracker
             AnsiConsole.Clear();
 
             var sql = "SELECT * FROM Logs";
-            var logs = connection.Query(sql);
-            foreach (var log in logs)
+            List<CodingSession> logs = (List<CodingSession>)connection.Query<CodingSession>(sql);
+
+            foreach (CodingSession log in logs)
             {
                 if (log.duration == 1)
                 {
-                    AnsiConsole.MarkupLine($"Id: {log.Id}, Name: {log.name}, Start Time: {log.startTime}, End Time: {log.endTime}, Duration: {log.duration} hours");
+                    AnsiConsole.MarkupLine($"Id: {log.id}, Name: {log.name}, Start Time: {log.startTime}, End Time: {log.endTime}, Duration: {log.duration} hour");
                 }
                 else
                 {
-                    AnsiConsole.MarkupLine($"Id: {log.Id}, Name: {log.name}, Start Time: {log.startTime}, End Time: {log.endTime}, Duration: {log.duration} hour");
+                    AnsiConsole.MarkupLine($"Id: {log.id}, Name: {log.name}, Start Time: {log.startTime}, End Time: {log.endTime}, Duration: {log.duration} hours");
                 }
             }
         }
