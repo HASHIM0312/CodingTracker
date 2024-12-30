@@ -5,8 +5,8 @@ Developed using C#, SQLite in Visual Studio
 # Requirements
 - [x] When the application starts, it should create a sqlite databsase
 - [x] It should create a table in the database
-- [ ] Need to have CRUD operations present
-- [ ] Dapper is used for SQLite operations
+- [x] Need to have CRUD operations present
+- [x] Dapper is used for SQLite operations
 
  # Features
 
